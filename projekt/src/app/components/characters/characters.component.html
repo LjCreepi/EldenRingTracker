@@ -1,0 +1,56 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      @if (creating()) {
+        <ion-button (click)="creating.set(false)">Back</ion-button>
+      } @else {
+        <ion-button (click)="close()" aria-label="Close">
+          <ion-icon slot="icon-only" name="close" aria-hidden="true"></ion-icon>
+        </ion-button>
+      }
+    </ion-buttons>
+    <ion-title>{{ creating() ? 'New character' : 'Characters' }}</ion-title>
+    @if (!creating()) {
+      <ion-buttons slot="end">
+        <ion-button (click)="creating.set(true)" aria-label="Create character">
+          <ion-icon slot="icon-only" name="add" aria-hidden="true"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    }
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (creating()) {
+    <app-character-form submitLabel="Create" (create)="onCreate($event)" />
+  } @else {
+    <ion-list>
+      @for (character of characters.characters(); track character.id) {
+        <ion-item button detail="false" (click)="pick(character.id)">
+          <ion-icon
+            slot="start"
+            name="checkmark-circle"
+            [color]="character.id === characters.activeId() ? 'primary' : ''"
+            [style.visibility]="
+              character.id === characters.activeId() ? 'visible' : 'hidden'
+            "
+            aria-hidden="true"
+          ></ion-icon>
+          <ion-label>
+            <h2>{{ character.name }}</h2>
+            <p>{{ className(character.classId) }} &middot; Lv {{ sheet.levelOf(character.id) }}</p>
+          </ion-label>
+          <ion-buttons slot="end">
+            <ion-button
+              color="medium"
+              aria-label="Delete character"
+              (click)="$event.stopPropagation(); confirmDelete(character.id)"
+            >
+              <ion-icon slot="icon-only" name="trash-outline" aria-hidden="true"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      }
+    </ion-list>
+  }
+</ion-content>

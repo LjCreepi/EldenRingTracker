@@ -1,0 +1,37 @@
+:host {
+  display: contents;
+}
+
+ion-item {
+  --min-height: 52px;
+
+  &.inv-row--active {
+    --background: var(--ion-color-step-100, rgba(127, 127, 127, 0.12));
+  }
+}
+
+.inv-row__thumb {
+  --size: 36px;
+  margin-inline-end: 12px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+  }
+}
+
+.inv-row__count {
+  min-width: 26px;
+  padding: 0;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  align-self: center;
+}
+
+.inv-row__chevron {
+  margin-inline-start: 6px;
+  font-size: 14px;
+  color: var(--ion-color-medium, #8a8a8a);
+}

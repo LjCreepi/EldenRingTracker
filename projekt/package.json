@@ -1,0 +1,51 @@
+{
+  "name": "EldenRingTracker",
+  "version": "0.6.0",
+  "description": "Interactive map progress tracker for Elden Ring (Angular + Ionic PWA).",
+  "scripts": {
+    "ng": "npx ng",
+    "prestart": "npm run prepare:map",
+    "start": "npx ng serve",
+    "build": "npx ng build",
+    "build:prod": "npx ng build --configuration production",
+    "start:built": "cd www && npx ng serve --port 8000",
+    "watch": "npx ng build --watch --configuration development",
+    "test": "npx ng test",
+    "lint": "npx ng lint",
+    "prepare:map": "node scripts/prepare-map-assets.mjs",
+    "fetch:images": "node scripts/fetch-marker-images.mjs",
+    "fetch:items": "node scripts/fetch-item-catalog.mjs"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/common": "22.0.1",
+    "@angular/compiler": "22.0.1",
+    "@angular/core": "22.0.1",
+    "@angular/forms": "22.0.1",
+    "@angular/platform-browser": "22.0.1",
+    "@angular/router": "22.0.1",
+    "@angular/service-worker": "22.0.1",
+    "@ionic/angular": "^9.0.0",
+    "ionicons": "^8.1.0",
+    "leaflet": "^1.9.4",
+    "leaflet.markercluster": "^1.5.3",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "22.0.1",
+    "@angular/cli": "22.0.1",
+    "@angular/compiler-cli": "22.0.1",
+    "@angular/language-service": "22.0.1",
+    "@ionic/angular-toolkit": "^13.0.0",
+    "@types/leaflet": "^1.9.22",
+    "@types/leaflet.markercluster": "^1.5.6",
+    "angular-eslint": "22.0.0",
+    "eslint": "^9.16.0",
+    "jsdom": "^26.0.0",
+    "sharp": "^0.35.4",
+    "typescript": "~6.0.0",
+    "typescript-eslint": "^8.61.0",
+    "vitest": "^4.0.8"
+  }
+}

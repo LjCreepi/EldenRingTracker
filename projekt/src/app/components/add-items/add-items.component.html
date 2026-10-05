@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ title() }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">Done</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      placeholder="Search"
+      [debounce]="150"
+      (ionInput)="setQuery($any($event.target).value ?? '')"
+    ></ion-searchbar>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-item lines="none">
+      <ion-toggle
+        [checked]="hideHeld()"
+        (ionChange)="setHideHeld($event.detail.checked)"
+      >
+        Hide items I already hold
+      </ion-toggle>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    @for (item of shown(); track item.id) {
+      <ion-item>
+        <ion-thumbnail slot="start" class="add-items__thumb">
+          <img [src]="iconFor(item)" alt="" />
+        </ion-thumbnail>
+        <ion-label class="ion-text-wrap">
+          {{ item.name }}
+          @if (inventory.quantity(item.id); as qty) {
+            <ion-note class="add-items__have">holding {{ qty }}</ion-note>
+          }
+        </ion-label>
+
+        <ion-buttons slot="end">
+          @if (inventory.has(item.id)) {
+            <ion-button (click)="inventory.adjust(item.id, -1)" aria-label="One fewer">
+              <ion-icon slot="icon-only" name="remove"></ion-icon>
+            </ion-button>
+            <ion-button (click)="inventory.adjust(item.id, 1)" aria-label="One more">
+              <ion-icon slot="icon-only" name="add"></ion-icon>
+            </ion-button>
+          } @else {
+            <ion-button (click)="inventory.add(item.id, 1)" aria-label="Add">
+              <ion-icon slot="icon-only" name="add"></ion-icon>
+            </ion-button>
+          }
+        </ion-buttons>
+      </ion-item>
+    } @empty {
+      <ion-item lines="none">
+        <ion-label class="ion-text-center">Nothing matches.</ion-label>
+      </ion-item>
+    }
+  </ion-list>
+
+  <ion-infinite-scroll [disabled]="!hasMore()" (ionInfinite)="loadMore($any($event))">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  @if (total()) {
+    <!-- ion-text colours its plain <p> child; there is no ion-paragraph. -->
+    <ion-text color="medium">
+      <p class="add-items__count">Showing {{ shown().length }} of {{ total() }}</p>
+    </ion-text>
+  }
+</ion-content>

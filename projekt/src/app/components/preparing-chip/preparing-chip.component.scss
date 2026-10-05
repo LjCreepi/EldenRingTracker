@@ -1,0 +1,56 @@
+:host {
+  position: fixed;
+  left: 50%;
+  // Stacks upward per `stackIndex` so a second chip (e.g. map tiles + item
+  // art warming up at once) never lands directly on top of this one.
+  bottom: calc(
+    16px + env(safe-area-inset-bottom, 0px) + var(--stack-index, 0) * 58px
+  );
+  transform: translateX(-50%);
+  z-index: 900;
+  max-width: calc(100% - 24px);
+  transition: bottom 0.2s ease;
+}
+
+.preparing-chip {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+
+  ion-item {
+    --min-height: 48px;
+    --padding-top: 6px;
+    --padding-bottom: 6px;
+    --padding-start: 14px;
+    --inner-padding-end: 2px;
+    --background: transparent;
+  }
+
+  ion-label {
+    font-size: 0.82rem;
+  }
+}
+
+.preparing-chip__progress {
+  display: block;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.preparing-chip__hint {
+  margin: 1px 0 0;
+  font-size: 0.7rem;
+  color: var(--ion-color-medium, #8a8a8a);
+  white-space: nowrap;
+}
+
+.preparing-chip__close {
+  --color: var(--ion-color-medium, #8a8a8a);
+  margin: 0;
+}
+
+ion-progress-bar {
+  --progress-background: var(--ion-color-primary);
+  height: 3px;
+}

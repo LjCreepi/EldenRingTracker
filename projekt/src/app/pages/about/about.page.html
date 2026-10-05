@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <app-menu-dock-button />
+    </ion-buttons>
+    <ion-title>About</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h1>Elden Ring Tracker</h1>
+  <p>
+    Track your personal progress through <em>Elden Ring</em> on an interactive
+    map of the Lands Between &mdash; toggle marker categories, and mark bosses,
+    sites of grace, dungeons and pickups as done. The Character menu adds a
+    by-hand inventory, an equipment loadout and a status sheet, styled after the
+    in-game menus.
+  </p>
+
+  <ion-list>
+    <ion-list-header>Character stats</ion-list-header>
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        On the Status and Equipment screens, equip-load percentage, roll weight
+        and Level are exact. HP, FP, stamina, poise, defences and resistances are
+        <em>approximations</em> (marked &ldquo;&asymp;&rdquo;), and weapon Attack
+        Rating is not simulated &mdash; equipped weapons show their base values
+        only. Don&rsquo;t use these against a real save or a build calculator.
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>Map symbols</ion-list-header>
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        A small flag on a completed pin means an optional bonus step is still
+        open &mdash; e.g. a found merchant whose Bell Bearing hasn&rsquo;t been
+        claimed yet. Open the pin again to deal with it.
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>Disclaimer</ion-list-header>
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        This is an unofficial, fan-made project, created for educational
+        purposes. It is not affiliated with, endorsed by, or associated with
+        FromSoftware Inc. or Bandai Namco Entertainment. <em>Elden Ring</em>,
+        all map imagery and all related names are the property of their
+        respective owners.
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>Credits</ion-list-header>
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        Map tiles, marker icons, and the world-coordinate projection are adapted
+        from the community project
+        <strong>EthanShoeDev/elden-ring-compass</strong>; all marker positions
+        are derived from the game's own map data. Collectible icons, boss
+        images, and all item data and icons in the Character menu are from the
+        <strong>Elden Ring Fan API</strong> (eldenring.fanapis.com), which covers
+        the base game only.
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>Build</ion-list-header>
+    <ion-item lines="none">
+      <ion-label>Version</ion-label>
+      <ion-note slot="end">{{ version }}</ion-note>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label>Stack</ion-label>
+      <ion-note slot="end">Angular &middot; Ionic &middot; Leaflet</ion-note>
+    </ion-item>
+    <ion-item button detail="false" (click)="showIntro()">
+      <ion-label color="primary">Show the intro again</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

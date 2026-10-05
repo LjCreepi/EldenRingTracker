@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      placeholder="Search"
+      [debounce]="150"
+      (ionInput)="query.set($any($event.target).value ?? '')"
+    ></ion-searchbar>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-item lines="none">
+      <ion-toggle
+        [checked]="anything()"
+        (ionChange)="anything.set($event.detail.checked)"
+      >
+        <ion-label>
+          Anything from the catalog
+          <ion-note class="ion-text-wrap">
+            Off: only items in your inventory.
+          </ion-note>
+        </ion-label>
+      </ion-toggle>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    @if (equippedId()) {
+      <ion-item button detail="false" (click)="clear()">
+        <ion-icon slot="start" name="close-circle" color="medium"></ion-icon>
+        <ion-label>Unequip</ion-label>
+      </ion-item>
+    }
+
+    @for (item of results(); track item.id) {
+      <ion-item button detail="false" (click)="choose(item)">
+        <ion-thumbnail slot="start" class="equip-picker__thumb">
+          <img [src]="iconFor(item)" alt="" />
+        </ion-thumbnail>
+        <ion-label class="ion-text-wrap">
+          {{ item.name }}
+          @if (!inInventory(item.id)) {
+            <ion-note color="warning">not in inventory</ion-note>
+          }
+          @if (effectSummary(item); as effect) {
+            <p>{{ effect }}</p>
+          }
+        </ion-label>
+      </ion-item>
+    } @empty {
+      <ion-item lines="none">
+        <ion-label class="ion-text-center equip-picker__empty">
+          @if (!anything()) {
+            Nothing eligible in your inventory. Turn on
+            &ldquo;Anything from the catalog&rdquo; for the full list.
+          } @else {
+            Nothing matches.
+          }
+        </ion-label>
+      </ion-item>
+    }
+  </ion-list>
+</ion-content>

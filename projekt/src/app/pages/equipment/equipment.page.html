@@ -1,0 +1,168 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <app-menu-dock-button />
+    </ion-buttons>
+    <ion-title>Equipment</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (!catalog.loaded()) {
+    <!-- ion-text colours a plain <p>; Ionic has no text-only block element. -->
+    <ion-text color="medium"><p class="equipment__hint">Loading item catalog&hellip;</p></ion-text>
+  } @else {
+    <ion-grid class="equipment-body">
+      <ion-row>
+        <!-- left: the slot grid. sizeMd (not Lg) so the three columns sit side
+             by side from tablet-portrait / phone-landscape up, not just desktop. -->
+        <ion-col class="equip-slots" size="12" sizeMd="4">
+          <app-equip-slot-grid
+            [groups]="groups()"
+            [selectedSlot]="selectedSlot()"
+            [spellItems]="spellItems()"
+            [greatRuneName]="greatRuneName()"
+            [physickTears]="physickTears()"
+            [physickActive]="physick.active()"
+            (openSlot)="openSlot($event)"
+            (openAshOfWar)="openAshOfWar($event)"
+            (openSpellPicker)="openSpellPicker()"
+            (removeSpell)="loadout.removeSpell($event)"
+            (openPhysickTear)="openPhysickTear($event)"
+            (togglePhysickActive)="physick.toggleActive()"
+          />
+        </ion-col>
+
+        <!-- middle: selected item's stats -->
+        <ion-col class="equip-detail" size="12" sizeMd="4">
+          @if (selectedItem(); as item) {
+            @if (selectedNotHeld()) {
+              <ion-item lines="none" class="equip-detail__flag">
+                <ion-icon slot="start" name="alert-circle" color="warning" aria-hidden="true"></ion-icon>
+                <ion-label class="ion-text-wrap" color="warning">
+                  Not in your inventory &mdash; equipped for build-planning only.
+                </ion-label>
+              </ion-item>
+            }
+            <app-item-detail [item]="item" [compact]="true" />
+
+            @if (selectedIsWeapon(); as isWeapon) {
+              @if (selectedBuild(); as build) {
+                <ion-list class="weapon-build" lines="full">
+                  <ion-list-header>Weapon Build</ion-list-header>
+
+                  <ion-item lines="none">
+                    <ion-label>Upgrade Path</ion-label>
+                  </ion-item>
+                  <ion-item lines="full">
+                    <ion-segment
+                      [value]="build.upgradePath"
+                      (ionChange)="setUpgradePath($any($event.detail.value))"
+                    >
+                      <ion-segment-button value="standard">
+                        <ion-label>Standard</ion-label>
+                      </ion-segment-button>
+                      <ion-segment-button value="somber">
+                        <ion-label>Somber</ion-label>
+                      </ion-segment-button>
+                    </ion-segment>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-label>
+                      Upgrade Level
+                      <ion-note>max +{{ selectedMaxUpgradeLevel() }}</ion-note>
+                    </ion-label>
+                    <ion-buttons slot="end">
+                      <ion-button
+                        aria-label="Lower upgrade level"
+                        [disabled]="build.upgradeLevel <= 0"
+                        (click)="setUpgradeLevel(-1)"
+                      >
+                        <ion-icon slot="icon-only" name="remove"></ion-icon>
+                      </ion-button>
+                      <ion-text class="attr-row__value">+{{ build.upgradeLevel }}</ion-text>
+                      <ion-button
+                        aria-label="Raise upgrade level"
+                        [disabled]="build.upgradeLevel >= selectedMaxUpgradeLevel()"
+                        (click)="setUpgradeLevel(1)"
+                      >
+                        <ion-icon slot="icon-only" name="add"></ion-icon>
+                      </ion-button>
+                    </ion-buttons>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-select
+                      label="Affinity"
+                      interface="popover"
+                      [value]="build.affinity"
+                      (ionChange)="setAffinity($any($event.detail.value))"
+                    >
+                      @for (id of affinityIds; track id) {
+                        <ion-select-option [value]="id">{{ affinityNames[id] }}</ion-select-option>
+                      }
+                    </ion-select>
+                  </ion-item>
+                  @if (build.affinity !== 'standard') {
+                    <ion-item lines="none">
+                      <ion-note class="ion-text-wrap">
+                        Affinity is tracked but doesn't change Attack Rating yet
+                        &mdash; only Standard-affinity math is modeled (see the
+                        About page).
+                      </ion-note>
+                    </ion-item>
+                  }
+
+                  <ion-item>
+                    <ion-toggle
+                      [checked]="build.twoHanded"
+                      (ionChange)="toggleTwoHanded()"
+                    >
+                      Two-Handing
+                    </ion-toggle>
+                  </ion-item>
+
+                  @if (selectedAttackRating(); as ar) {
+                    <ion-item class="status-panel__subhead" lines="none">
+                      <ion-label>Attack Rating</ion-label>
+                    </ion-item>
+                    @for (entry of ar.byType | keyvalue; track entry.key) {
+                      <ion-item>
+                        <ion-label>{{ entry.key }}</ion-label>
+                        <ion-note slot="end" class="status-panel__value">{{ entry.value }}</ion-note>
+                      </ion-item>
+                    }
+                    <ion-item>
+                      <ion-label><strong>Total</strong></ion-label>
+                      <ion-note slot="end" class="status-panel__value"><strong>{{ ar.total }}</strong></ion-note>
+                    </ion-item>
+                  }
+                  <ion-item lines="none">
+                    <ion-note class="ion-text-wrap">
+                      Best-effort simulation, not the exact in-game formula
+                      &mdash; see the About page.
+                    </ion-note>
+                  </ion-item>
+                </ion-list>
+              }
+            }
+          } @else {
+            <!-- ion-text colours a plain <p>; Ionic has no text-only block. -->
+            <ion-text color="medium">
+              <p class="equipment__hint">
+                {{ selectedSlot() ? 'Nothing equipped in this slot.' : 'Select a slot.' }}
+              </p>
+            </ion-text>
+          }
+        </ion-col>
+
+        <!-- right: live character status -->
+        <ion-col class="equip-status" size="12" sizeMd="4">
+          <app-character-status />
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  }
+</ion-content>

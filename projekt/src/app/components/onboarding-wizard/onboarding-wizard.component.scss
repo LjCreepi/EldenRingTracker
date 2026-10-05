@@ -1,0 +1,44 @@
+:host {
+  position: fixed;
+  inset: 0;
+  // Above the app shell and the "saving…" chips, below Ionic's own overlays.
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  background: var(--ion-background-color, #12100c);
+}
+
+.wizard {
+  --padding-top: 16px;
+  --padding-bottom: 24px;
+}
+
+// The grid fills the viewport and centres its row vertically. `safe` means a
+// tall step (the 10-class list) aligns to the top and stays scrollable instead
+// of having its head clipped.
+.wizard ion-grid {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+}
+
+.wizard__title {
+  margin: 0 0 0.6rem;
+  text-align: center;
+  font-size: 1.3rem;
+  letter-spacing: 0.01em;
+}
+
+.wizard__body {
+  margin: 0 0 1.25rem;
+  text-align: center;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--ion-color-medium, #9a938a);
+}
+
+.wizard__nav {
+  margin-top: 0.5rem;
+  min-height: 44px;
+}

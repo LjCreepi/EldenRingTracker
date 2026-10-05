@@ -1,0 +1,71 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* Dark mode is driven by the `.ion-palette-dark` class on <html>, toggled by
+ * ThemeService from the user's Appearance preference (light / dark / system). */
+@import '@ionic/angular/css/palettes/dark.class.css';
+
+/* Leaflet core styles (map panes, controls, markers, tooltips) + clustering. */
+@import 'leaflet/dist/leaflet.css';
+@import 'leaflet.markercluster/dist/MarkerCluster.css';
+@import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+
+/*
+ * No double-tap-to-zoom anywhere — `user-scalable=no` (src/index.html) does not
+ * stop it on its own, and iOS Safari ignores that flag entirely.
+ * `.leaflet-container` sets its own `touch-action`, which wins over this, so the
+ * map keeps its pinch / double-tap / wheel zoom. Pinch (touch) and ctrl+wheel
+ * (desktop) zoom of the page are blocked in JS (AppComponent).
+ */
+html {
+  touch-action: manipulation;
+}
+
+/*
+ * Collapsible docked side menu (AppComponent). When the menu is collapsed the
+ * split-pane stays active — so the layout doesn't reflow to overlay mode — but
+ * the docked menu is pulled out of flow and the content pane fills the width.
+ * `.split-pane-side` is added by Ionic at runtime, so this can't be scoped to a
+ * component.
+ *
+ * Must also require `.split-pane-visible` (Ionic's own class for "currently
+ * docked", toggled live off the `when="md"` media query): `.split-pane-side` is
+ * assigned once at connect and never removed, so without this the rule kept
+ * hiding the menu below `md` too. That stranded phones that happened to cross
+ * `md` in landscape — Hide the docked menu there, rotate back to portrait, and
+ * the now-overlay menu stayed `display: none`, with no way to reopen it.
+ */
+ion-split-pane.split-pane-visible.menu-collapsed .split-pane-side {
+  display: none;
+}

@@ -1,0 +1,184 @@
+.map-host {
+  position: absolute;
+  inset: 0;
+  background: var(--erm-map-backdrop);
+}
+
+// --- responsive-only additions (docs/responsive.md) ------------------------
+
+// Layer switch: docs/responsive.md — same control as the side menu's, shown
+// here instead on tablet+/desktop; phones keep it in the menu (AppComponent).
+.layer-toolbar-switch {
+  display: none;
+}
+
+// Overall-completion card: tablet+/desktop only, out of the way on phones.
+.progress-card {
+  display: none;
+}
+
+// Docked marker-detail panel: tablet+/desktop only; phones use the popover
+// (MapPage.openMarker) instead.
+.detail-panel {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .layer-toolbar-switch {
+    display: inline-flex;
+    // Wide enough for both full labels ("Lands Between" / "Underground") —
+    // 260px clipped them to unreadable fragments ("LANDS BET…") on landscape
+    // phones (~768-900px), which dock the side menu and so rely on this
+    // toolbar copy as the only way to switch layers (docs/responsive.md).
+    max-width: 340px;
+
+    ion-segment-button {
+      --padding-start: 8px;
+      --padding-end: 8px;
+      font-size: 0.78rem;
+    }
+  }
+
+  .progress-card {
+    display: block;
+    position: absolute;
+    inset-block-end: 12px;
+    inset-inline-start: 12px;
+    z-index: 500;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: var(--ion-background-color, #1e1e1e);
+    border: 1px solid var(--ion-border-color, rgba(255, 255, 255, 0.12));
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .detail-panel {
+    display: block;
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    z-index: 600;
+    width: min(340px, 38vw);
+    margin: 0;
+    border-radius: 0;
+    background: var(--ion-background-color, #1e1e1e);
+    border-inline-start: 1px solid var(--ion-border-color, rgba(255, 255, 255, 0.12));
+    box-shadow: -4px 0 16px rgba(0, 0, 0, 0.35);
+    overflow-y: auto;
+  }
+}
+
+.detail-panel__bar {
+  --background: transparent;
+  --min-height: 34px;
+  --padding-start: 0;
+  --inner-padding-end: 6px;
+}
+
+.detail-panel__close {
+  --color: inherit;
+  margin: 0;
+}
+
+:host ::ng-deep {
+  .leaflet-container {
+    background: var(--erm-map-backdrop);
+    font-family: inherit;
+  }
+
+  .leaflet-bar a {
+    background: var(--ion-background-color, #fff);
+    color: var(--ion-text-color, #000);
+    border-bottom-color: var(--ion-border-color, rgba(0, 0, 0, 0.15));
+  }
+
+  .leaflet-bar a:hover {
+    background: var(--ion-color-step-100, #eee);
+  }
+
+  .erm-pin {
+    display: block;
+    position: relative;
+    width: 28px;
+    height: 28px;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.65));
+    transition: transform 0.1s ease;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    &:hover {
+      transform: scale(1.2);
+    }
+
+    &--done img {
+      opacity: 0.6;
+      border: 2px solid var(--ion-color-success, #2dd36f);
+      border-radius: 50%;
+    }
+
+    // Completed, but an optional bonus step (e.g. a Bell Bearing) is still
+    // open — a small flag badge (see About page for what it means).
+    &__flag {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--ion-color-warning, #ffc409);
+      box-shadow: 0 0 0 2px var(--erm-map-backdrop);
+    }
+  }
+
+  // Category cluster: the category icon with the child count badged on top.
+  .erm-cluster {
+    display: block;
+    position: relative;
+    width: 40px;
+    height: 40px;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7));
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  .erm-cluster__count {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    border-radius: 9px;
+    background: var(--ion-color-primary, #c9a227);
+    color: var(--ion-color-primary-contrast, #000);
+    box-shadow: 0 0 0 2px var(--erm-map-backdrop);
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 17px;
+    text-align: center;
+  }
+
+  .leaflet-tooltip {
+    background: var(--ion-background-color, #fff);
+    color: var(--ion-text-color, #000);
+    border: 1px solid var(--ion-border-color, rgba(0, 0, 0, 0.15));
+    font-weight: 600;
+  }
+}

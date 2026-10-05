@@ -1,0 +1,19 @@
+<ion-card class="preparing-chip" role="status">
+  <ion-item lines="none" class="preparing-chip__body">
+    <ion-label>
+      <span class="preparing-chip__progress">{{ label() }} &middot; {{ percent() }}%</span>
+      <p class="preparing-chip__hint">Hiding this won't stop it</p>
+    </ion-label>
+    <ion-button
+      slot="end"
+      fill="clear"
+      size="small"
+      class="preparing-chip__close"
+      aria-label="Hide this — the download keeps going"
+      (click)="dismissed.emit()"
+    >
+      <ion-icon slot="icon-only" name="close" aria-hidden="true"></ion-icon>
+    </ion-button>
+  </ion-item>
+  <ion-progress-bar [value]="ratio()"></ion-progress-bar>
+</ion-card>

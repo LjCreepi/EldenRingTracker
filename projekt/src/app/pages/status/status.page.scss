@@ -1,0 +1,64 @@
+.status-body {
+  --ion-grid-padding: 0;
+  --ion-grid-column-padding: 0;
+  padding: 0;
+  min-height: 100%;
+
+  ion-row {
+    min-height: 100%;
+  }
+}
+
+.status-edit ion-item {
+  --min-height: 46px;
+}
+
+.status-edit__note {
+  font-size: 0.78rem;
+  line-height: 1.4;
+  padding: 4px 0 8px;
+}
+
+.identity__name {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+// The Furled Finger's Trick-Mirror talisman — a raster easter-egg, lifted off
+// the dark background with a soft glow so it reads as a button.
+.status-edit__identity-btn {
+  --padding-start: 4px;
+  --padding-end: 4px;
+  height: 48px;
+
+  &::part(native) {
+    padding: 4px;
+  }
+}
+
+.mirror-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 4px rgba(var(--ion-color-primary-rgb, 201, 162, 39), 0.5));
+}
+
+.attr-row__value {
+  min-width: 30px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  align-self: center;
+}
+
+.status-derived {
+  border-inline-start: 1px solid var(--ion-border-color, rgba(127, 127, 127, 0.18));
+}
+
+:host(.compact) {
+  .status-derived {
+    border-inline-start: 0;
+    border-top: 2px solid var(--ion-color-primary);
+  }
+}

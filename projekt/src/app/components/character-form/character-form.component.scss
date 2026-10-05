@@ -1,0 +1,54 @@
+:host {
+  display: block;
+}
+
+.character-form__classes {
+  margin-bottom: 0;
+}
+
+// Ionic's radio label defaults to a single non-wrapping line, which clipped
+// the class name and the hint below to an unreadable "…" at narrow widths
+// (ion-text-wrap on the radio wasn't enough once two lines' worth of text
+// were packed onto one). Force both onto their own full-width, wrapping
+// lines instead.
+.character-form__radio {
+  white-space: normal;
+}
+
+.character-form__radio-label {
+  white-space: normal;
+}
+
+.character-form__hint-inline {
+  display: block;
+  white-space: normal;
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+.character-form__spread {
+  display: block;
+  padding: 6px 16px 14px;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+  color: var(--ion-color-medium, #9a938a);
+}
+
+.character-form__name {
+  margin-top: 4px;
+}
+
+.character-form__hint {
+  font-size: 0.82rem;
+  line-height: 1.4;
+
+  strong {
+    color: var(--ion-text-color);
+    letter-spacing: 0.02em;
+  }
+}
+
+.character-form__submit {
+  margin: 16px;
+}

@@ -1,0 +1,60 @@
+.inventory__hint {
+  margin: 0;
+  padding: 28px 16px 8px;
+  text-align: center;
+}
+
+.inventory__cta {
+  display: block;
+  margin: 0 auto 24px;
+  width: fit-content;
+}
+
+ion-segment-button ion-badge {
+  margin-inline-start: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+// --- body: list column + detail column (ion-grid) ----------------------
+.inventory-body {
+  --ion-grid-padding: 0;
+  --ion-grid-column-padding: 0;
+  padding: 0;
+  min-height: 100%;
+
+  ion-row {
+    min-height: 100%;
+  }
+}
+
+.inventory-detail {
+  position: relative;
+  border-inline-start: 1px solid var(--ion-border-color, rgba(127, 127, 127, 0.2));
+  background: var(--ion-color-step-50, rgba(127, 127, 127, 0.04));
+}
+
+.inventory-detail__bar {
+  position: absolute;
+  top: 4px;
+  inset-inline-end: 4px;
+  z-index: 1;
+}
+
+.inventory-list ion-list {
+  padding-top: 0;
+}
+
+// --- compact: detail on top, pinned as you scroll ---------------------
+:host(.compact) {
+  .inventory-detail {
+    order: -1;
+    border-inline-start: 0;
+    border-bottom: 2px solid var(--ion-color-primary);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--ion-background-color, #1c1c1c);
+    max-height: 55vh;
+    overflow-y: auto;
+  }
+}

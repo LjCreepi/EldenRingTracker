@@ -1,0 +1,75 @@
+@for (group of groups(); track group.group) {
+  <ion-row class="equip-slots__group">
+    @for (slot of group.slots; track slot.def.id) {
+      <ion-col class="equip-slot-wrap" size="4">
+        <app-equip-slot-tile
+          [slot]="slot"
+          [active]="selectedSlot() === slot.def.id"
+          [greatRuneName]="greatRuneName()"
+          (openSlot)="openSlot.emit(slot.def.id)"
+          (openAshOfWar)="openAshOfWar.emit(slot.def.id)"
+        />
+      </ion-col>
+    }
+  </ion-row>
+}
+
+<ion-list class="equip-spells" lines="full">
+  <ion-list-header>Memorized Spells</ion-list-header>
+  @for (spell of spellItems(); track spell.item.id) {
+    <ion-item>
+      <ion-thumbnail slot="start" class="equip-spell__thumb">
+        <img [src]="iconFor(spell.item)" alt="" />
+      </ion-thumbnail>
+      <ion-label class="ion-text-wrap">
+        {{ spell.item.name }}
+        @if (spell.notHeld) {
+          <ion-note color="warning">not in inventory</ion-note>
+        }
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-button aria-label="Forget spell" (click)="removeSpell.emit(spell.item.id)">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  }
+  <ion-item button detail="false" (click)="openSpellPicker.emit()">
+    <ion-icon slot="start" name="add" color="primary"></ion-icon>
+    <ion-label color="primary">Memorize a spell</ion-label>
+  </ion-item>
+</ion-list>
+
+<ion-list class="equip-physick" lines="full">
+  <ion-list-header>Wondrous Physick</ion-list-header>
+  @for (tear of physickTears(); track $index) {
+    <ion-item button detail="false" (click)="openPhysickTear.emit($index === 0 ? 0 : 1)">
+      <ion-thumbnail slot="start" class="equip-spell__thumb">
+        <img [src]="iconFor(tear.item)" alt="" />
+      </ion-thumbnail>
+      <ion-label class="ion-text-wrap">
+        {{ tear.item?.name ?? 'Empty' }}
+        @if (tear.notHeld) {
+          <ion-note color="warning">not in inventory</ion-note>
+        }
+        @if (tear.effectSummary) {
+          <p>{{ tear.effectSummary }}</p>
+        }
+      </ion-label>
+    </ion-item>
+  }
+  <ion-item>
+    <ion-toggle
+      [checked]="physickActive()"
+      (ionChange)="togglePhysickActive.emit()"
+    >
+      Active (drunk)
+    </ion-toggle>
+  </ion-item>
+  <ion-item lines="none">
+    <ion-note class="ion-text-wrap">
+      Toggle "Active" to preview the mix's effect against your stats without
+      it being tied to a real timer.
+    </ion-note>
+  </ion-item>
+</ion-list>

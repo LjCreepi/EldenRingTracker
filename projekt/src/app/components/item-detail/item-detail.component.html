@@ -1,0 +1,46 @@
+<ion-list lines="none">
+  <ion-item class="item-detail__head">
+    @if (!compact()) {
+      <ion-thumbnail slot="start" class="item-detail__thumb">
+        <img [src]="icon()" alt="" />
+      </ion-thumbnail>
+    }
+    <ion-label class="ion-text-wrap">
+      <!-- ion-label styles plain h2/p children; Ionic has no ion-heading. -->
+      <h2>{{ item().name }}</h2>
+      @if (item().effect) {
+        <p class="item-detail__effect">{{ item().effect }}</p>
+      }
+    </ion-label>
+  </ion-item>
+
+  @for (fact of facts(); track fact.label) {
+    <ion-item>
+      <ion-label>{{ fact.label }}</ion-label>
+      <ion-note slot="end">{{ fact.value }}</ion-note>
+    </ion-item>
+  }
+</ion-list>
+
+@for (group of statGroups(); track group.heading) {
+  <ion-list lines="none" class="item-detail__stats">
+    <ion-list-header>{{ group.heading }}</ion-list-header>
+    @for (row of group.rows; track row.name) {
+      <ion-item>
+        <ion-label>{{ row.name }}</ion-label>
+        <ion-note slot="end">{{ row.value }}</ion-note>
+      </ion-item>
+    }
+  </ion-list>
+}
+
+@if (item().description) {
+  <!-- ion-text colours its plain <p> child; there is no ion-paragraph. -->
+  <ion-text color="medium">
+    <p class="item-detail__desc">{{ item().description }}</p>
+  </ion-text>
+}
+
+<ion-note class="item-detail__source">
+  Base values from the Elden Ring Fan API.
+</ion-note>

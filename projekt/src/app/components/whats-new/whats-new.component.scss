@@ -1,0 +1,12 @@
+// Inline <ion-modal> puts this component's host straight into the modal frame,
+// so it has to lay itself out — an inline host collapses ion-content to nothing
+// (one clipped line + a scrollbar, which was the bug).
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.whats-new__ok {
+  margin-top: 1.5rem;
+}

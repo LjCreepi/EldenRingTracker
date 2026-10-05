@@ -1,0 +1,45 @@
+.equipment__hint {
+  margin: 0;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+// --- body: three columns, like the in-game Equipment screen -------------
+.equipment-body {
+  --ion-grid-padding: 0;
+  --ion-grid-column-padding: 0;
+  padding: 0;
+  min-height: 100%;
+
+  > ion-row {
+    min-height: 100%;
+  }
+}
+
+.equip-detail,
+.equip-status {
+  border-inline-start: 1px solid var(--ion-border-color, rgba(127, 127, 127, 0.18));
+}
+
+.equip-detail__flag {
+  --min-height: 36px;
+  --background: rgba(var(--ion-color-warning-rgb, 255, 196, 9), 0.12);
+  font-size: 0.8rem;
+
+  ion-icon {
+    font-size: 18px;
+  }
+}
+
+.equip-slots {
+  padding: 10px;
+}
+
+// --- compact: stack the three columns; slots first --------------------
+:host(.compact) {
+  .equip-detail,
+  .equip-status {
+    border-inline-start: 0;
+    border-top: 2px solid var(--ion-color-primary);
+  }
+}

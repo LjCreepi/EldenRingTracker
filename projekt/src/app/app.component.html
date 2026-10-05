@@ -1,0 +1,208 @@
+<ion-app>
+  <!--
+    The shell is always mounted so the router outlet keeps its page (an
+    IonRouterOutlet created after navigation doesn't pick the route up, which
+    left the map blank). The Onboarding Wizard sits on top as a full-screen
+    overlay while there's no active character; the shell underneath is inert.
+
+    when="md": the menu is an overlay on phones (portrait and landscape) and docks
+    beside the map from tablet-portrait up (~768px). This is Ionic's default
+    breakpoint, pinned explicitly so the phone-vs-tablet layout split is a
+    deliberate, documented choice. See docs/responsive.md.
+
+    menu-collapsed: on wide viewports the user can hide the docked menu
+    (menuDocked preference, "Hide" button in the menu header) to give the map
+    the full width. The docked side is pulled out of flow in src/global.scss.
+    Each page's <app-menu-dock-button>, next to its <ion-menu-button>, re-docks
+    it in one click.
+  -->
+  <ion-split-pane
+    contentId="main-content"
+    when="md"
+    [class.menu-collapsed]="!prefs.menuDocked()"
+  >
+    <ion-menu contentId="main-content" type="overlay">
+      <ion-content>
+        <!-- Outside the <ion-list>: a list-header carrying a <button> isn't a
+             valid listitem, which trips axe's aria-required-children on the
+             list's role="list". -->
+        <ion-list-header class="menu-header">
+          <ion-label>Elden Ring Tracker</ion-label>
+          <ion-button
+            class="menu-dock-toggle"
+            fill="solid"
+            size="small"
+            color="primary"
+            (click)="prefs.setMenuDocked(false)"
+            aria-label="Hide the menu"
+          >
+            <ion-icon slot="start" name="chevron-back" aria-hidden="true"></ion-icon>
+            Hide
+          </ion-button>
+        </ion-list-header>
+
+        <ion-list>
+          <ion-menu-toggle [autoHide]="false">
+            <ion-item
+              button
+              detail="false"
+              lines="full"
+              class="character-bar"
+              (click)="openCharacters()"
+            >
+              <ion-icon slot="start" name="person-circle" aria-hidden="true"></ion-icon>
+              <ion-label>
+                <h2>{{ character.activeCharacter()?.name }}</h2>
+                <p>{{ activeClassName() }} &middot; Lv {{ activeLevel() }}</p>
+              </ion-label>
+              <ion-icon slot="end" name="chevron-forward" aria-hidden="true"></ion-icon>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+
+        <ion-list class="nav-list">
+          @for (page of navPages; track page.url) {
+            <ion-menu-toggle [autoHide]="false">
+              <ion-item
+                [routerLink]="[page.url]"
+                routerLinkActive="selected"
+                routerDirection="root"
+                lines="none"
+                detail="false"
+              >
+                <ion-icon slot="start" [name]="page.icon" aria-hidden="true"></ion-icon>
+                <ion-label>{{ page.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          }
+        </ion-list>
+
+        <!-- Phones only — tablet+/desktop gets this switch in the map page's
+             own toolbar instead (docs/responsive.md). -->
+        <ion-list class="layer-menu-list">
+          <ion-list-header>Map layer</ion-list-header>
+          <ion-segment
+            [value]="prefs.activeLayer()"
+            (ionChange)="setLayer($any($event.detail.value))"
+          >
+            @for (layer of layers; track layer.id) {
+              <ion-segment-button [value]="layer.id">
+                <ion-label>{{ layer.name }}</ion-label>
+              </ion-segment-button>
+            }
+          </ion-segment>
+        </ion-list>
+
+        <ion-list>
+          <ion-list-header>Markers</ion-list-header>
+
+          <ion-item lines="none" class="marker-hint">
+            <!-- ion-text colours a plain <p>; Ionic has no text-only block element. -->
+            <ion-text color="medium">
+              <p>Rarer finds start hidden — switch on what you're hunting.</p>
+            </ion-text>
+          </ion-item>
+
+          <ion-item lines="none" class="marker-all">
+            <ion-toggle
+              [checked]="allMarkersVisible()"
+              (ionChange)="
+                prefs.setAllCategoriesVisible(
+                  catalog.categories(),
+                  $event.detail.checked
+                )
+              "
+            >
+              <ion-label>All markers</ion-label>
+            </ion-toggle>
+          </ion-item>
+
+          @for (category of ungroupedCategories(); track category.id) {
+            <ng-container *ngTemplateOutlet="categoryItem; context: { $implicit: category }" />
+          }
+
+          @for (section of groupedSections(); track section.group.id) {
+            <!-- A real <ion-item button> (a listitem) rather than an
+                 <ion-item-divider role="button">: the divider's button role made
+                 it an illegal child of the list's role="list". Enter/Space come
+                 for free with the button item. -->
+            <ion-item
+              button
+              detail="false"
+              lines="none"
+              class="group-header"
+              [attr.aria-expanded]="!prefs.isGroupCollapsed(section.group.id)"
+              (click)="prefs.toggleGroupCollapsed(section.group.id)"
+            >
+              <img slot="start" class="category-icon" [src]="section.group.icon" alt="" />
+              <ion-label>{{ section.group.name }}</ion-label>
+              <ion-icon
+                slot="end"
+                name="chevron-down"
+                class="group-chevron"
+                [class.group-chevron--collapsed]="prefs.isGroupCollapsed(section.group.id)"
+                aria-hidden="true"
+              ></ion-icon>
+            </ion-item>
+            @if (!prefs.isGroupCollapsed(section.group.id)) {
+              @for (category of section.categories; track category.id) {
+                <ng-container *ngTemplateOutlet="categoryItem; context: { $implicit: category }" />
+              }
+            }
+          }
+        </ion-list>
+
+        <ng-template #categoryItem let-category>
+          <ion-item lines="none">
+            <img slot="start" class="category-icon" [src]="category.icon" alt="" />
+            <ion-toggle
+              [checked]="prefs.isCategoryVisible(category.id, category.defaultHidden)"
+              (ionChange)="
+                prefs.setCategoryVisible(
+                  category.id,
+                  $event.detail.checked,
+                  category.defaultHidden
+                )
+              "
+            >
+              <ion-label>{{ category.name }}</ion-label>
+              @if (category.completable) {
+                <ion-note>
+                  {{ count(category.id).done }} / {{ count(category.id).total }}
+                </ion-note>
+              }
+            </ion-toggle>
+          </ion-item>
+        </ng-template>
+      </ion-content>
+    </ion-menu>
+
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-split-pane>
+
+  @if (itemAssets.state() === 'downloading' && !itemAssets.dismissed()) {
+    <app-preparing-chip
+      label="Saving item art"
+      [ratio]="itemAssets.ratio()"
+      (dismissed)="itemAssets.dismiss()"
+    />
+  }
+
+  <!-- Full-screen overlay while there's no active character (first run, or the
+       last character was deleted). -->
+  @if (onboarding.needsWizard()) {
+    <app-onboarding-wizard />
+  }
+
+  <ion-modal
+    class="whats-new-modal"
+    [isOpen]="showWhatsNew()"
+    (didDismiss)="onWhatsNewDismissed()"
+  >
+    <ng-template>
+      @if (onboarding.whatsNew(); as note) {
+        <app-whats-new [note]="note" (dismissed)="showWhatsNew.set(false)" />
+      }
+    </ng-template>
+  </ion-modal>
+</ion-app>

@@ -1,0 +1,32 @@
+<ion-content class="ion-padding">
+  @if (headerImage(); as image) {
+    <img class="marker-detail__image" [src]="image" alt="" />
+  }
+  <ion-list lines="none">
+    <ion-item>
+      <ion-label>
+        <h2>{{ marker.name }}</h2>
+        <ion-note>{{ category.name }}</ion-note>
+      </ion-label>
+    </ion-item>
+
+    @if (category.completable) {
+      <app-marker-completion
+        [done]="done()"
+        [doneStatus]="doneStatus()"
+        [actionLabel]="actionLabel()"
+        [bonusStep]="bonusStep()"
+        [bonusDone]="bonusDone()"
+        (toggleDone)="toggle()"
+        (toggleBonus)="toggleBonus()"
+      />
+    }
+
+    @if (marker.wikiUrl) {
+      <ion-item [href]="marker.wikiUrl" target="_blank" rel="noopener">
+        <ion-icon slot="start" name="open-outline"></ion-icon>
+        <ion-label>Open wiki page</ion-label>
+      </ion-item>
+    }
+  </ion-list>
+</ion-content>

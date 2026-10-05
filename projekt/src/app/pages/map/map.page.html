@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <app-menu-dock-button />
+    </ion-buttons>
+    <ion-title>Map</ion-title>
+
+    <!-- Tablet+/desktop only (docs/responsive.md) — phones keep this switch in
+         the side menu (AppComponent). Same control, different placement. -->
+    <ion-segment
+      slot="end"
+      class="layer-toolbar-switch"
+      [value]="prefs.activeLayer()"
+      (ionChange)="setLayer($any($event.detail.value))"
+    >
+      @for (layer of layers; track layer.id) {
+        <ion-segment-button [value]="layer.id">
+          <ion-label>{{ layer.name }}</ion-label>
+        </ion-segment-button>
+      }
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [scrollY]="false">
+  <!-- bare element: Leaflet mounts into a plain DOM node, not an Ionic component. -->
+  <div #mapHost class="map-host"></div>
+  @if (tileCache.state() === 'downloading' && !tileCache.dismissed()) {
+    <app-preparing-chip
+      label="Saving map"
+      [ratio]="tileCache.ratio()"
+      [stackIndex]="tileChipStackIndex()"
+      (dismissed)="tileCache.dismiss()"
+    />
+  }
+
+  <!-- Tablet+/desktop only: overall completion, out of the way on phones where
+       the space is needed for the map. -->
+  <ion-text class="progress-card">
+    <p>
+      {{ (character.activeCharacter()?.name || 'Tarnished') }}'s progress:
+      {{ overallProgress().done }} / {{ overallProgress().total }}
+    </p>
+  </ion-text>
+
+  <!-- Tablet+/desktop only: docked marker detail instead of a phone popover
+       (see `openMarker`). -->
+  @if (selectedMarker(); as sel) {
+    <ion-card class="detail-panel">
+      <ion-item lines="none" class="detail-panel__bar">
+        <ion-button
+          slot="end"
+          fill="clear"
+          size="small"
+          class="detail-panel__close"
+          aria-label="Close"
+          (click)="closeDetail()"
+        >
+          <ion-icon slot="icon-only" name="close" aria-hidden="true"></ion-icon>
+        </ion-button>
+      </ion-item>
+      <app-marker-detail
+        [marker]="sel.marker"
+        [category]="sel.category"
+        [dismissOnToggle]="false"
+      />
+    </ion-card>
+  }
+</ion-content>

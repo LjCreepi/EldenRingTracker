@@ -1,0 +1,25 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>New in {{ note().version }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissed.emit()" aria-label="Close">
+        <ion-icon slot="icon-only" name="close" aria-hidden="true"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list lines="none">
+    @for (line of note().highlights; track line) {
+      <ion-item>
+        <ion-icon slot="start" name="sparkles" color="primary" aria-hidden="true"></ion-icon>
+        <ion-label class="ion-text-wrap">{{ line }}</ion-label>
+      </ion-item>
+    }
+  </ion-list>
+
+  <ion-button expand="block" class="whats-new__ok" (click)="dismissed.emit()">
+    Got it
+  </ion-button>
+</ion-content>

@@ -1,0 +1,22 @@
+.equip-picker__thumb {
+  --size: 40px;
+  margin-inline-end: 10px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+  }
+}
+
+.equip-picker__empty {
+  padding: 16px 0;
+  color: var(--ion-color-medium, #8a8a8a);
+  line-height: 1.5;
+  white-space: normal;
+}
+
+ion-label ion-note[color='warning'] {
+  display: block;
+}

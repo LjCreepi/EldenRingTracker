@@ -1,0 +1,41 @@
+<ion-card
+  button
+  class="equip-slot"
+  [class.equip-slot--active]="active()"
+  [class.equip-slot--filled]="slot().item"
+  (click)="openSlot.emit()"
+>
+  @if (slot().itemNotHeld) {
+    <ion-icon
+      class="equip-slot__flag"
+      name="alert-circle"
+      color="warning"
+      aria-label="Not in your inventory"
+    ></ion-icon>
+  }
+  @if (slot().item; as item) {
+    <img [src]="iconFor(item)" alt="" />
+  } @else {
+    <ion-icon name="add" aria-hidden="true"></ion-icon>
+  }
+  <ion-text class="equip-slot__label">
+    @if (slot().def.id === 'great-rune' && greatRuneName()) {
+      {{ greatRuneName() }}
+    } @else {
+      {{ slot().item?.name ?? slot().def.name }}
+    }
+  </ion-text>
+</ion-card>
+@if (slot().isArmament && slot().item) {
+  <ion-button
+    class="equip-slot__aow"
+    expand="block"
+    fill="outline"
+    size="small"
+    [color]="slot().ashNotHeld ? 'warning' : undefined"
+    (click)="openAshOfWar.emit()"
+  >
+    <ion-icon slot="start" name="sparkles" aria-hidden="true"></ion-icon>
+    {{ slot().ashOfWar?.name ?? 'Ash of War' }}
+  </ion-button>
+}

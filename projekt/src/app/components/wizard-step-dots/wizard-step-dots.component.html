@@ -1,0 +1,11 @@
+@if (count() > 1) {
+  <ion-row class="ion-justify-content-center wizard-step-dots">
+    @for (i of indices(); track i) {
+      <ion-icon
+        [name]="i === active() ? 'ellipse' : 'ellipse-outline'"
+        [color]="i === active() ? 'primary' : 'medium'"
+        aria-hidden="true"
+      ></ion-icon>
+    }
+  </ion-row>
+}

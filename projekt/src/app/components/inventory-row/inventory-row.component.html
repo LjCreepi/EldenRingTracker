@@ -1,0 +1,32 @@
+<ion-item
+  button
+  detail="false"
+  [class.inv-row--active]="active()"
+  (click)="activate.emit()"
+>
+  <ion-thumbnail slot="start" class="inv-row__thumb">
+    <img [src]="icon()" alt="" />
+  </ion-thumbnail>
+  <ion-label class="ion-text-wrap">{{ item().name }}</ion-label>
+
+  <ion-buttons slot="end" (click)="$event.stopPropagation()">
+    <ion-button aria-label="One fewer" (click)="adjust.emit(-1)">
+      <ion-icon slot="icon-only" name="remove"></ion-icon>
+    </ion-button>
+    <ion-note class="inv-row__count">{{ quantity() }}</ion-note>
+    <ion-button aria-label="One more" (click)="adjust.emit(1)">
+      <ion-icon slot="icon-only" name="add"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+
+  <!-- The row's own tap target (opens the detail pane) had no visual cue at
+       all beyond the +/- stepper — detail="false" above suppresses Ionic's
+       default one, so add it back explicitly, matching the side menu's
+       character-bar row. -->
+  <ion-icon
+    slot="end"
+    name="chevron-forward"
+    class="inv-row__chevron"
+    aria-hidden="true"
+  ></ion-icon>
+</ion-item>

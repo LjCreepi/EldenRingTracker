@@ -1,0 +1,90 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <app-menu-dock-button />
+    </ion-buttons>
+    <ion-title>Inventory</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="openAdd()">
+        <ion-icon slot="start" name="add"></ion-icon>
+        Add items
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment
+      scrollable
+      [value]="activeCategory()"
+      (ionChange)="pickCategory($event.detail.value)"
+    >
+      @for (cat of categories(); track cat.id) {
+        <ion-segment-button [value]="cat.id">
+          <ion-label>
+            {{ cat.name }}
+            @if (heldInCategory().get(cat.id); as n) {
+              <ion-badge>{{ n }}</ion-badge>
+            }
+          </ion-label>
+        </ion-segment-button>
+      }
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (!catalog.loaded()) {
+    <!-- ion-text colours a plain <p>; Ionic has no text-only block element. -->
+    <ion-text color="medium"><p class="inventory__hint">Loading item catalog&hellip;</p></ion-text>
+  } @else {
+    <ion-grid class="inventory-body">
+      <ion-row>
+        <ion-col
+          class="inventory-list"
+          size="12"
+          [sizeMd]="selected() ? '8' : '12'"
+        >
+          @if (rows().length === 0) {
+            <!-- ion-text colours a plain <p>; Ionic has no text-only block. -->
+            <ion-text color="medium">
+              <p class="inventory__hint">
+                @if (activeCategory()) {
+                  Nothing in this category yet.
+                } @else {
+                  Your inventory is empty.
+                }
+              </p>
+            </ion-text>
+            <ion-button size="small" fill="outline" class="inventory__cta" (click)="openAdd()">
+              <ion-icon slot="start" name="add"></ion-icon>
+              Add items
+            </ion-button>
+          }
+
+          <ion-list>
+            @for (item of rows(); track item.id) {
+              <app-inventory-row
+                [item]="item"
+                [active]="selected()?.id === item.id"
+                [quantity]="inventory.quantity(item.id)"
+                (activate)="select(item)"
+                (adjust)="inventory.adjust(item.id, $event)"
+              />
+            }
+          </ion-list>
+        </ion-col>
+
+        @if (selected(); as item) {
+          <ion-col class="inventory-detail" size="12" sizeMd="4">
+            <ion-buttons class="inventory-detail__bar">
+              <ion-button aria-label="Close" (click)="selected.set(null)">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+            <app-item-detail [item]="item" />
+          </ion-col>
+        }
+      </ion-row>
+    </ion-grid>
+  }
+</ion-content>

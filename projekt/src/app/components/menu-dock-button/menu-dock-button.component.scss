@@ -1,0 +1,12 @@
+// Hidden below `md`: the menu is always an overlay there, already reachable via
+// the page's own <ion-menu-button>. `display: contents` (once eligible) lets the
+// inner ion-button lay out directly inside the parent <ion-buttons>.
+:host {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  :host {
+    display: contents;
+  }
+}

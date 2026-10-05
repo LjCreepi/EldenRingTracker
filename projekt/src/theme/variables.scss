@@ -1,0 +1,43 @@
+// Ionic theming: https://ionicframework.com/docs/theming/
+//
+// Two colour schemes are required by the project brief. Each is a set of
+// `--ion-color-primary*` custom properties selected by `data-scheme` on <html>
+// (set by ThemeService). Light/dark is handled separately by `.ion-palette-dark`.
+//
+// `--erm-*` is this project's own custom-property namespace. Every `--erm-*` var
+// is declared here so component styles can reference it without an inline
+// fallback; `--ion-*` vars are owned by Ionic's global stylesheet.
+
+@mixin scheme-erdtree {
+  --ion-color-primary: #c9a227;
+  --ion-color-primary-rgb: 201, 162, 39;
+  --ion-color-primary-contrast: #000000;
+  --ion-color-primary-contrast-rgb: 0, 0, 0;
+  --ion-color-primary-shade: #b18f22;
+  --ion-color-primary-tint: #cfab3d;
+
+  --erm-map-backdrop: #100f0a;
+}
+
+@mixin scheme-ash {
+  --ion-color-primary: #5f7fa8;
+  --ion-color-primary-rgb: 95, 127, 168;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #547093;
+  --ion-color-primary-tint: #6f8db2;
+
+  --erm-map-backdrop: #0c0f12;
+}
+
+:root {
+  @include scheme-erdtree;
+}
+
+:root[data-scheme='erdtree'] {
+  @include scheme-erdtree;
+}
+
+:root[data-scheme='ash'] {
+  @include scheme-ash;
+}

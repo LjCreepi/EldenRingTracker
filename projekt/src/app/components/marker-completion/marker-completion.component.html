@@ -1,0 +1,45 @@
+@if (done()) {
+  <ion-item>
+    <ion-icon slot="start" name="checkmark-circle" color="success"></ion-icon>
+    <ion-label class="ion-text-wrap">{{ doneStatus() }}</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-button expand="block" fill="outline" color="medium" (click)="toggleDone.emit()">
+      Undo
+    </ion-button>
+  </ion-item>
+} @else {
+  <ion-item>
+    <ion-button expand="block" color="success" (click)="toggleDone.emit()">
+      <ion-icon slot="start" name="checkmark-circle"></ion-icon>
+      {{ actionLabel() }}
+    </ion-button>
+  </ion-item>
+}
+
+@if (bonusStep(); as step) {
+  @if (done()) {
+    @if (bonusDone()) {
+      <ion-item>
+        <ion-icon slot="start" name="checkmark-circle" color="success"></ion-icon>
+        <ion-label class="ion-text-wrap">{{ step.doneStatus }}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-button expand="block" fill="clear" size="small" color="medium" (click)="toggleBonus.emit()">
+          Undo
+        </ion-button>
+      </ion-item>
+    } @else {
+      <ion-item>
+        <ion-button expand="block" fill="outline" color="success" (click)="toggleBonus.emit()">
+          {{ step.action }}
+        </ion-button>
+      </ion-item>
+      @if (step.note) {
+        <ion-item lines="none">
+          <ion-note class="ion-text-wrap">{{ step.note }}</ion-note>
+        </ion-item>
+      }
+    }
+  }
+}

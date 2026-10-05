@@ -1,0 +1,50 @@
+{
+  "$schema": "./node_modules/@angular/service-worker/config/schema.json",
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "resources": {
+        "files": [
+          "/favicon.ico",
+          "/index.html",
+          "/manifest.webmanifest",
+          "/*.css",
+          "/*.js"
+        ]
+      }
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/data/*.json",
+          "/assets/markers/*.png",
+          "/assets/items/*.svg",
+          "/icons/*.png",
+          "/*.(svg|ico|png|webp|woff2)"
+        ]
+      }
+    },
+    {
+      "name": "map-tiles",
+      "installMode": "lazy",
+      "updateMode": "lazy",
+      "cacheQueryOptions": { "ignoreVary": true },
+      "resources": {
+        "files": ["/assets/map-tiles/**/*.webp"]
+      }
+    },
+    {
+      "name": "item-icons",
+      "installMode": "lazy",
+      "updateMode": "lazy",
+      "resources": {
+        "files": ["/assets/items/**/*.png"]
+      }
+    }
+  ]
+}

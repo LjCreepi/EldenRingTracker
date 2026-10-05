@@ -1,0 +1,134 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <app-menu-dock-button />
+    </ion-buttons>
+    <ion-title>Status</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="status-body">
+    <ion-row>
+      <ion-col class="status-edit" size="12" sizeMd="7">
+        <ion-list>
+          <ion-list-header>Character</ion-list-header>
+          <ion-item lines="none">
+            <ion-label>
+              <h2 class="identity__name">{{ character.activeCharacter()?.name }}</h2>
+              <p>{{ sheet.startingClass().name }} &middot; Level {{ sheet.level() }}</p>
+            </ion-label>
+            <ion-buttons slot="end">
+              <ion-button
+                class="status-edit__identity-btn"
+                (click)="openMirror()"
+                aria-label="Rename at the mirror"
+              >
+                <!-- bare <img>: the mirror is the Furled Finger's Trick-Mirror
+                     talisman art, a raster with no ion-icon (SVG-only) equivalent
+                     — same pattern as the marker icons in the menu. -->
+                <img slot="icon-only" class="mirror-icon" src="assets/icons/mirror.png" alt="" />
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-note class="ion-text-wrap status-edit__note">
+              Class is fixed at creation. Attributes can be raised but not taken
+              below the class base.
+            </ion-note>
+          </ion-item>
+
+          @for (row of attributeRows; track row.id) {
+            <ion-item>
+              <ion-label>
+                {{ row.name }}
+                <ion-note>base {{ baseAttributes()[row.id] }}</ion-note>
+              </ion-label>
+              <ion-buttons slot="end">
+                <ion-button
+                  aria-label="Lower"
+                  [disabled]="sheet.sheet().attributes[row.id] <= baseAttributes()[row.id]"
+                  (click)="sheet.adjustAttribute(row.id, -1)"
+                >
+                  <ion-icon slot="icon-only" name="remove"></ion-icon>
+                </ion-button>
+                <ion-text class="attr-row__value">
+                  {{ sheet.sheet().attributes[row.id] }}
+                </ion-text>
+                <ion-button
+                  aria-label="Raise"
+                  [disabled]="sheet.sheet().attributes[row.id] >= 99"
+                  (click)="sheet.adjustAttribute(row.id, 1)"
+                >
+                  <ion-icon slot="icon-only" name="add"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-item>
+          }
+        </ion-list>
+
+        <ion-list>
+          <ion-list-header>Flask</ion-list-header>
+          <ion-item>
+            <ion-label>
+              Golden Seeds Used
+              <ion-note>{{ flask.goldenSeedsHeld() }} held, unused</ion-note>
+            </ion-label>
+            <ion-buttons slot="end">
+              <ion-button
+                aria-label="Un-use a Golden Seed"
+                [disabled]="flask.goldenSeedsUsed() <= 0"
+                (click)="flask.unuseGoldenSeed()"
+              >
+                <ion-icon slot="icon-only" name="remove"></ion-icon>
+              </ion-button>
+              <ion-text class="attr-row__value">{{ flask.goldenSeedsUsed() }}</ion-text>
+              <ion-button
+                aria-label="Use a Golden Seed"
+                [disabled]="flask.goldenSeedsHeld() <= 0"
+                (click)="flask.useGoldenSeed()"
+              >
+                <ion-icon slot="icon-only" name="add"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              Sacred Tears Used
+              <ion-note>{{ flask.sacredTearsHeld() }} held, unused</ion-note>
+            </ion-label>
+            <ion-buttons slot="end">
+              <ion-button
+                aria-label="Un-use a Sacred Tear"
+                [disabled]="flask.sacredTearsUsed() <= 0"
+                (click)="flask.unuseSacredTear()"
+              >
+                <ion-icon slot="icon-only" name="remove"></ion-icon>
+              </ion-button>
+              <ion-text class="attr-row__value">{{ flask.sacredTearsUsed() }}</ion-text>
+              <ion-button
+                aria-label="Use a Sacred Tear"
+                [disabled]="flask.sacredTearsHeld() <= 0"
+                (click)="flask.useSacredTear()"
+              >
+                <ion-icon slot="icon-only" name="add"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-note class="ion-text-wrap status-edit__note">
+              Using one moves it out of Inventory for good and raises the Flask
+              stats on the right — same as reinforcing your Flask at a Site of
+              Grace.
+            </ion-note>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+
+      <ion-col class="status-derived" size="12" sizeMd="5">
+        <app-character-status [hideAttributes]="true" />
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

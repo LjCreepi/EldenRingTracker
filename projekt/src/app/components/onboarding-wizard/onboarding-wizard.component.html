@@ -1,0 +1,54 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>{{ current() === 'create' ? 'New character' : 'Getting started' }}</ion-title>
+    @if (skippable()) {
+      <ion-buttons slot="end">
+        <ion-button (click)="skip()">Skip</ion-button>
+      </ion-buttons>
+    }
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding wizard">
+  <ion-grid>
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" sizeMd="9" sizeLg="7">
+        @if (current() === 'intro') {
+          <ion-text>
+            <h1 class="wizard__title">{{ introPanel().title }}</h1>
+            <p class="wizard__body">{{ introPanel().body }}</p>
+          </ion-text>
+        } @else {
+          <ion-text>
+            <h1 class="wizard__title">Create your character</h1>
+            <p class="wizard__body">
+              Pick a starting class and a name. Attributes are raised later on the
+              Status screen; the class is set for good.
+            </p>
+          </ion-text>
+          <app-character-form
+            submitLabel="Enter the Lands Between"
+            (create)="onCreate($event)"
+          />
+        }
+
+        <ion-row class="ion-align-items-center wizard__nav">
+          <ion-col>
+            @if (step() > 0) {
+              <ion-button fill="clear" size="small" (click)="back()">Back</ion-button>
+            }
+          </ion-col>
+          <ion-col class="ion-text-end">
+            @if (current() === 'intro') {
+              <ion-button (click)="next()">
+                {{ isLast() ? 'Enter the Lands Between' : 'Next' }}
+              </ion-button>
+            }
+          </ion-col>
+        </ion-row>
+
+        <app-wizard-step-dots [count]="panels().length" [active]="step()" />
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

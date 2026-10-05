@@ -1,0 +1,180 @@
+ion-menu ion-content {
+  --background: var(--ion-item-background, var(--ion-background-color, #fff));
+}
+
+// "What's New" — a compact centred card, not a full-screen takeover.
+.whats-new-modal {
+  --width: min(420px, 92vw);
+  --height: min(440px, 82vh);
+  --border-radius: 14px;
+}
+
+ion-menu ion-list {
+  padding: 12px 0;
+}
+
+ion-menu ion-list + ion-list {
+  border-top: 1px solid var(--ion-border-color, rgba(0, 0, 0, 0.12));
+}
+
+// Moved into the map page's own toolbar at this size — see docs/responsive.md.
+@media (min-width: 768px) {
+  ion-menu ion-list.layer-menu-list {
+    display: none;
+  }
+}
+
+ion-menu ion-list-header {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ion-color-medium, #777);
+  min-height: 32px;
+}
+
+// The title/"Hide" header sits outside a list (see app.component.html), so it
+// misses the list's 12px top padding — put it back.
+ion-menu ion-list-header.menu-header {
+  padding-top: 12px;
+}
+
+ion-menu ion-list-header ion-label {
+  flex: 1;
+}
+
+// "Hide" control in the menu header — collapses the docked menu. Pointless below
+// `md` (the menu is always an overlay there), so it only shows once docking is
+// possible. Solid primary fill so it reads as an action, not decoration.
+ion-menu .menu-dock-toggle {
+  display: none;
+  margin: 0;
+  height: 26px;
+  font-size: 0.7rem;
+  letter-spacing: 0.03em;
+  --padding-start: 8px;
+  --padding-end: 10px;
+}
+
+@media (min-width: 768px) {
+  ion-menu .menu-dock-toggle {
+    display: inline-flex;
+  }
+}
+
+// NB: `.menu-collapsed .split-pane-side` lives in src/global.scss — it targets
+// a class Ionic adds at runtime, which view encapsulation can't reach. The
+// bring-back control is <app-menu-dock-button> in each page's toolbar.
+
+ion-menu ion-item.marker-all ion-label {
+  font-weight: 600;
+}
+
+ion-menu ion-item.marker-hint {
+  --min-height: 0;
+  --padding-top: 0;
+  --padding-bottom: 6px;
+
+  p {
+    margin: 0;
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+}
+
+// The active-character bar at the top of the menu — opens the Characters screen.
+ion-menu ion-item.character-bar {
+  --padding-top: 4px;
+  --padding-bottom: 4px;
+
+  h2 {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  p {
+    font-size: 0.78rem;
+    color: var(--ion-color-medium, #777);
+  }
+
+  ion-icon[slot='start'] {
+    font-size: 24px;
+    color: var(--ion-color-medium, #777);
+  }
+
+  ion-icon[slot='end'] {
+    font-size: 16px;
+    color: var(--ion-color-medium, #777);
+  }
+}
+
+ion-menu ion-item.selected {
+  --background: rgba(var(--ion-color-primary-rgb), 0.14);
+  --color: var(--ion-color-primary);
+
+  ion-icon {
+    color: var(--ion-color-primary);
+  }
+}
+
+ion-menu .category-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  margin-right: 20px;
+  opacity: 0.9;
+}
+
+// Section headers inside the Markers list. An <ion-item button> (styled down to
+// look like the old <ion-item-divider>) so it's a valid listitem — see the
+// template comment.
+ion-menu ion-item.group-header {
+  --background: transparent;
+  --padding-top: 10px;
+  --padding-bottom: 2px;
+  --min-height: 30px;
+  --color: var(--ion-color-medium, #777);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+
+  .category-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 24px;
+    opacity: 0.7;
+  }
+
+  &:hover {
+    --color: var(--ion-text-color, #000);
+  }
+}
+
+ion-menu .group-chevron {
+  font-size: 14px;
+  transition: transform 0.15s ease;
+}
+
+ion-menu .group-chevron--collapsed {
+  transform: rotate(-90deg);
+}
+
+// The menu itself is narrow, and this segment only ever has the two Map
+// Layer options — shrink the button padding/font rather than the default
+// size, which clipped both labels to unreadable fragments ("LANDS BET…").
+ion-menu ion-segment {
+  padding: 0 12px;
+
+  ion-segment-button {
+    --padding-start: 4px;
+    --padding-end: 4px;
+    min-width: 0;
+    font-size: 0.68rem;
+  }
+}
+
+ion-menu ion-note {
+  font-size: 0.75rem;
+}

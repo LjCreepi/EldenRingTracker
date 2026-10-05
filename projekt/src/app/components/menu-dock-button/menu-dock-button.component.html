@@ -1,0 +1,5 @@
+@if (!prefs.menuDocked()) {
+  <ion-button (click)="prefs.setMenuDocked(true)" aria-label="Show the menu">
+    <ion-icon slot="icon-only" name="menu" aria-hidden="true"></ion-icon>
+  </ion-button>
+}

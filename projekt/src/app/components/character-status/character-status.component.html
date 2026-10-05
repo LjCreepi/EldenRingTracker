@@ -1,0 +1,30 @@
+<ion-list lines="none">
+  <ion-list-header>Character Status</ion-list-header>
+
+  @for (section of sections(); track $index) {
+    @if (section.heading) {
+      <ion-item class="status-panel__subhead" lines="none">
+        <ion-label>{{ section.heading }}</ion-label>
+      </ion-item>
+    }
+    @for (row of section.rows; track row.label) {
+      <ion-item>
+        <ion-label>
+          {{ row.label }}
+          @if (row.approx) { <ion-note>&asymp;</ion-note> }
+        </ion-label>
+        <ion-note slot="end" class="status-panel__value">
+          {{ row.value }}
+          @if (row.sub) {
+            <ion-text class="status-panel__sub">{{ row.sub }}</ion-text>
+          }
+        </ion-note>
+      </ion-item>
+    }
+  }
+</ion-list>
+
+<ion-note class="status-panel__disclaimer">
+  Values marked &asymp; are approximate &mdash; the exact Elden Ring formulas
+  are not simulated (see the About page).
+</ion-note>

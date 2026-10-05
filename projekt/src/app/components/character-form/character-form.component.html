@@ -1,0 +1,57 @@
+<ion-list class="character-form__classes">
+  <ion-radio-group
+    [value]="classId()"
+    (ionChange)="classId.set($any($event.detail.value))"
+  >
+    @for (cls of classes; track cls.id) {
+      <ion-item>
+        <ion-radio [value]="cls.id" class="ion-text-wrap character-form__radio">
+          <div class="character-form__radio-label">
+            {{ cls.name }} &middot; Lv {{ cls.level }}
+          </div>
+          @if (cls.id === defaultClassId) {
+            <!-- Ionic has no inline text element for a radio's own label; a plain
+                 div keeps this on its own line so it can't be clipped by the
+                 name's single-line layout (it was, at narrow widths). -->
+            <ion-text color="medium" class="character-form__hint-inline">
+              &mdash; a safe pick if you're unsure
+            </ion-text>
+          }
+        </ion-radio>
+      </ion-item>
+    }
+  </ion-radio-group>
+</ion-list>
+
+<ion-note class="character-form__spread">{{ spread() }}</ion-note>
+
+<ion-list class="character-form__name">
+  <ion-item>
+    <ion-input
+      label="Name"
+      labelPlacement="stacked"
+      [value]="name()"
+      [maxlength]="maxLength"
+      autocapitalize="words"
+      enterkeyhint="done"
+      (ionInput)="setName($event.detail.value)"
+      (keydown.enter)="submit()"
+    ></ion-input>
+  </ion-item>
+  @if (showCensorHint()) {
+    <ion-item lines="none">
+      <ion-note class="character-form__hint">
+        Others will see this as <strong>{{ censored() }}</strong>.
+      </ion-note>
+    </ion-item>
+  }
+</ion-list>
+
+<ion-button
+  expand="block"
+  class="character-form__submit"
+  [disabled]="!valid()"
+  (click)="submit()"
+>
+  {{ submitLabel() }}
+</ion-button>

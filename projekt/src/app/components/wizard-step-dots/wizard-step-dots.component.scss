@@ -1,0 +1,12 @@
+:host {
+  display: contents;
+}
+
+.wizard-step-dots {
+  gap: 6px;
+  margin-top: 1.5rem;
+
+  ion-icon {
+    font-size: 9px;
+  }
+}
